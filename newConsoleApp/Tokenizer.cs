@@ -57,6 +57,10 @@ namespace newConsoleApp
         }
         public bool validate()
         {
+            if(TokenList == null)
+            {
+                return false;
+            }
             for (int i = 0; i < TokenList.Count-1; i++)
             {
                 MathToken currenttoken = TokenList[i];

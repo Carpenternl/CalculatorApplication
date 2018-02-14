@@ -82,7 +82,7 @@ namespace calculatorApplication
                     break;
             }
             //check wether the last item is (now) an operator
-            if(_tokenizer.TokenList[_tokenizer.TokenList.Count-1] is OperatorToken)
+            if(_tokenizer.TokenList != null && _tokenizer.TokenList[_tokenizer.TokenList.Count-1] is OperatorToken)
             {
                 clearvalue();
             }
@@ -141,35 +141,39 @@ namespace calculatorApplication
 
         private void ButtonEnter_Click(object sender, EventArgs e)
         {
-            bool isvalid = _tokenizer.validate();
-            // divide by zero error found
-            if (!isvalid)
+            if(_tokenizer.TokenList != null)
             {
-                convertedinput.Text = "Sorry, you cannot divide by Zero";
-                
-            }
-            else
-            {
-                if (listofresults.Count > 0)
+                bool isvalid = _tokenizer.validate();
+                // divide by zero error found
+                if (!isvalid)
                 {
-                    _tokenizer.constructTree(listofresults[0]);
-                    clearvalue();
+                    convertedinput.Text = "Sorry, you cannot divide by Zero";
+
                 }
                 else
                 {
-                    _tokenizer.constructTree();
-                }
-                convertedinput.Text = _tokenizer.ToString();
-                userinput.Clear();
-                _tokenizer.buildTree();
-                ConstantToken resulttoken = _tokenizer.TokenList[0].GetResult();
-                listofresults.Insert(0, resulttoken);
-                resultlistview.Items.Clear();
-                foreach (var a in listofresults)
-                {
-                    resultlistview.Items.Add(a.Print());
+                    if (listofresults.Count > 0)
+                    {
+                        _tokenizer.constructTree(listofresults[0]);
+                        clearvalue();
+                    }
+                    else
+                    {
+                        _tokenizer.constructTree();
+                    }
+                    convertedinput.Text = _tokenizer.ToString();
+                    userinput.Clear();
+                    _tokenizer.buildTree();
+                    ConstantToken resulttoken = _tokenizer.TokenList[0].GetResult();
+                    listofresults.Insert(0, resulttoken);
+                    resultlistview.Items.Clear();
+                    foreach (var a in listofresults)
+                    {
+                        resultlistview.Items.Add(a.Print());
+                    }
                 }
             }
+            
             Operator_Click(sender,e);
             _tokenizer.TokenList = null;
             updateDisplay();
